@@ -99,4 +99,4 @@ def test_health_check(client):
     assert data['status'] == 'healthy'
     assert 'uptime_seconds' in data
     assert 'services' in data
-```
+
