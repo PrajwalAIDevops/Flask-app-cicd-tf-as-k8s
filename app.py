@@ -93,4 +93,4 @@ def health_check():
 
 if __name__ == '__main__':
     # Force the reloader to ignore anything outside your current project directory
-    app.run(debug=True, extra_files=[])
+    app.run(host='0.0.0.0', port=5000, debug=True)

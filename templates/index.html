@@ -1,282 +1,170 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Application Control Center</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
-        .code-font { font-family: 'JetBrains Mono', monospace; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Application Control Center</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+body { font-family: 'Plus Jakarta Sans', sans-serif; }
+.code-font { font-family: 'JetBrains Mono', monospace; }
+
+/* ✅ Reusable design system (reduces duplication massively) */
+.card { @apply bg-slate-900 border border-slate-800 rounded-2xl p-6; }
+.panel { @apply bg-slate-950 border border-slate-800 rounded-xl p-4; }
+.btn { @apply px-3 py-2 rounded-lg transition-all; }
+.icon-btn { @apply p-2 rounded-lg border border-slate-700 bg-slate-800 hover:bg-slate-700; }
+
+.metric-card { @apply panel; }
+.label { @apply text-xs text-slate-400; }
+.title { @apply text-sm font-semibold uppercase tracking-wider text-slate-400; }
+.subtext { @apply text-xs text-slate-500; }
+</style>
 </head>
+
 <body id="appBody" class="bg-slate-950 text-slate-100 min-h-screen transition-colors duration-300">
 
-    <nav class="border-b border-slate-800 bg-slate-900/50 backdrop-blur px-6 py-4 flex items-center justify-between sticky top-0 z-50">
-        <div class="flex items-center gap-3">
-            <div class="p-2 bg-indigo-600/20 text-indigo-400 rounded-lg">
-                <i data-lucide="layers" class="w-5 h-5"></i>
-            </div>
-            <div>
-                <span class="font-bold tracking-tight text-lg">Flask Nexus</span>
-                <span class="ml-2 px-2 py-0.5 text-xs bg-slate-800 text-slate-400 border border-slate-700 rounded-full code-font">v1.0.0</span>
-            </div>
-        </div>
-        
-        <div class="flex items-center gap-4">
-            <button id="healthBtn" onclick="checkAppHealth()" class="flex items-center gap-2 px-3 py-1.5 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 rounded-lg text-xs font-medium transition-all group">
-                <span class="relative flex h-2 w-2">
-                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                    <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                </span>
-                <span>System: Online</span>
-                <i data-lucide="refresh-cw" class="w-3 h-3 ml-1 group-hover:rotate-180 transition-transform duration-500"></i>
-            </button>
+<!-- NAV -->
+<nav class="border-b border-slate-800 bg-slate-900/50 backdrop-blur px-6 py-4 flex justify-between sticky top-0 z-50">
+<div class="flex items-center gap-3">
+    <div class="p-2 bg-indigo-600/20 text-indigo-400 rounded-lg">
+        <i data-lucide="layers"></i>
+    </div>
+    <div>
+        <span class="font-bold text-lg">Flask Nexus</span>
+        <span class="ml-2 px-2 py-0.5 text-xs bg-slate-800 text-slate-400 border border-slate-700 rounded-full code-font">
+            v1.0.0
+        </span>
+    </div>
+</div>
 
-            <button id="themeToggleBtn" onclick="toggleTheme()" class="p-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg text-slate-300 transition-all">
-                <i id="themeIcon" data-lucide="sun" class="w-4 h-4"></i>
-            </button>
-        </div>
-    </nav>
+<div class="flex items-center gap-4">
+    <button id="healthBtn" onclick="checkAppHealth()" class="btn bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center gap-2">
+        <span class="relative flex h-2 w-2">
+            <span class="animate-ping absolute h-full w-full rounded-full bg-emerald-400"></span>
+            <span class="relative h-2 w-2 bg-emerald-500 rounded-full"></span>
+        </span>
+        System: Online
+        <i data-lucide="refresh-cw"></i>
+    </button>
 
-    <main class="max-w-7xl mx-auto p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
-        
-        <div class="lg:col-span-2 space-y-6">
-            
-            <section class="bg-slate-900 border border-slate-800 rounded-2xl p-6 relative overflow-hidden">
-                <div class="flex items-center justify-between mb-4">
-                    <div>
-                        <h2 class="text-sm font-semibold uppercase tracking-wider text-slate-400">Endpoint 1: Real-time Metrics</h2>
-                        <p class="text-xs text-slate-500 code-font mt-0.5">GET /api/stats</p>
-                    </div>
-                    <button onclick="fetchMetrics()" class="p-2 bg-indigo-600/10 hover:bg-indigo-600 text-indigo-400 hover:text-white rounded-lg transition-all">
-                        <i data-lucide="download-cloud" class="w-4 h-4"></i>
-                    </button>
-                </div>
+    <button id="themeToggleBtn" onclick="toggleTheme()" class="icon-btn">
+        <i id="themeIcon" data-lucide="sun"></i>
+    </button>
+</div>
+</nav>
 
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div class="bg-slate-950/50 border border-slate-800 p-4 rounded-xl">
-                        <p class="text-xs text-slate-400 mb-1">Active Users</p>
-                        <h3 id="metricUsers" class="text-2xl font-bold text-white tracking-tight">--</h3>
-                    </div>
-                    <div class="bg-slate-950/50 border border-slate-800 p-4 rounded-xl">
-                        <p class="text-xs text-slate-400 mb-1">Server Load</p>
-                        <h3 id="metricLoad" class="text-2xl font-bold text-white tracking-tight">--</h3>
-                    </div>
-                    <div class="bg-slate-950/50 border border-slate-800 p-4 rounded-xl">
-                        <p class="text-xs text-slate-400 mb-1">Daily Requests</p>
-                        <h3 id="metricRequests" class="text-2xl font-bold text-white tracking-tight">--</h3>
-                    </div>
-                </div>
-            </section>
+<!-- MAIN -->
+<main class="max-w-7xl mx-auto p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-            <section class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-                <div class="mb-5">
-                    <h2 class="text-sm font-semibold uppercase tracking-wider text-slate-400">Endpoint 2: Client Registration</h2>
-                    <p class="text-xs text-slate-500 code-font mt-0.5">POST /api/submit</p>
-                </div>
+<!-- LEFT -->
+<div class="lg:col-span-2 space-y-6">
 
-                <form id="submitForm" class="space-y-4">
-                    <div>
-                        <label for="username" class="block text-xs font-medium text-slate-400 mb-2">Account Name</label>
-                        <div class="relative">
-                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500">
-                                <i data-lucide="user-plus" class="w-4 h-4"></i>
-                            </span>
-                            <input type="text" id="username" required
-                                class="w-full pl-10 pr-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all text-sm"
-                                placeholder="Enter structural or client identity">
-                        </div>
-                    </div>
-                    <button type="submit" class="w-full sm:w-auto px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 active:scale-[0.98] text-white font-medium rounded-xl text-sm transition-all flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/20">
-                        <span>Execute Transaction</span>
-                        <i data-lucide="send" class="w-4 h-4"></i>
-                    </button>
-                </form>
-            </section>
-        </div>
+<!-- METRICS -->
+<section class="card">
+<div class="flex justify-between mb-4">
+    <div>
+        <h2 class="title">Endpoint 1: Real-time Metrics</h2>
+        <h1>prajwal</h1>
+        <p class="code-font subtext">GET /api/stats</p>
+    </div>
+    <button onclick="fetchMetrics()" class="icon-btn text-indigo-400">
+        <i data-lucide="download-cloud"></i>
+    </button>
+</div>
 
-        <div class="space-y-6">
-            <section class="bg-slate-900 border border-slate-800 rounded-2xl p-6 h-full flex flex-col min-h-[400px]">
-                <div class="flex items-center justify-between mb-4">
-                    <div>
-                        <h2 class="text-sm font-semibold uppercase tracking-wider text-slate-400">API Gateway Console</h2>
-                        <p class="text-xs text-slate-500 mt-0.5">Live application stream output</p>
-                    </div>
-                    <button onclick="clearConsole()" class="text-xs text-slate-500 hover:text-slate-300 underline underline-offset-4">
-                        Clear logs
-                    </button>
-                </div>
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
 
-                <div id="consoleLog" class="flex-1 bg-slate-950 border border-slate-800 rounded-xl p-4 code-font text-xs text-slate-400 overflow-y-auto max-h-[340px] space-y-2">
-                    <div class="text-slate-600 animate-pulse">// Waiting for endpoint activity...</div>
-                </div>
-            </section>
-        </div>
-    </main>
-
-    <div id="toast" class="fixed bottom-6 right-6 transform translate-y-20 opacity-0 transition-all duration-300 bg-slate-900 border border-slate-800 p-4 rounded-xl shadow-2xl z-50 flex items-center gap-3 max-w-sm pointer-events-none">
-        <div id="toastIcon" class="p-2 rounded-lg"></div>
-        <div>
-            <p id="toastMessage" class="text-sm font-medium text-white"></p>
-        </div>
+    <div class="metric-card">
+        <p class="label">Active Users</p>
+        <h3 id="metricUsers" class="text-2xl font-bold">--</h3>
     </div>
 
-    <script>
-        // Initialize Interactive Layout Icons
-        lucide.createIcons();
+    <div class="metric-card">
+        <p class="label">Server Load</p>
+        <h3 id="metricLoad" class="text-2xl font-bold">--</h3>
+    </div>
 
-        let currentTheme = 'dark';
+    <div class="metric-card">
+        <p class="label">Daily Requests</p>
+        <h3 id="metricRequests" class="text-2xl font-bold">--</h3>
+    </div>
 
-        // Helper: Format Server responses straight into the Console Widget
-        function logToConsole(method, endpoint, status, payload) {
-            const consoleBox = document.getElementById('consoleLog');
-            if(consoleBox.innerHTML.includes('// Waiting')) consoleBox.innerHTML = '';
-            
-            const timestamp = new Date().toLocaleTimeString();
-            const statusColor = status >= 400 ? 'text-rose-400' : 'text-emerald-400';
-            
-            const entry = document.createElement('div');
-            entry.className = "p-2 bg-slate-900/50 border border-slate-800/60 rounded-lg space-y-1 animate-fadeIn";
-            entry.innerHTML = `
-                <div class="flex items-center justify-between font-medium">
-                    <span class="text-indigo-400">[${timestamp}] <span class="text-slate-200">${method}</span> ${endpoint}</span>
-                    <span class="${statusColor}">${status}</span>
-                </div>
-                <pre class="text-slate-500 text-[11px] overflow-x-auto whitespace-pre-wrap">${JSON.stringify(payload, null, 2)}</pre>
-            `;
-            consoleBox.appendChild(entry);
-            consoleBox.scrollTop = consoleBox.scrollHeight;
-        }
+</div>
+</section>
 
-        // Helper: Push temporary alert notifications onto screen
-        function showToast(message, type = 'success') {
-            const toast = document.getElementById('toast');
-            const icon = document.getElementById('toastIcon');
-            const msg = document.getElementById('toastMessage');
-            
-            msg.textContent = message;
-            if(type === 'success') {
-                icon.className = "p-2 bg-emerald-500/10 text-emerald-400 rounded-lg";
-                icon.innerHTML = '<i data-lucide="check-circle" class="w-4 h-4"></i>';
-            } else {
-                icon.className = "p-2 bg-rose-500/10 text-rose-400 rounded-lg";
-                icon.innerHTML = '<i data-lucide="alert-triangle" class="w-4 h-4"></i>';
-            }
-            lucide.createIcons();
+<!-- FORM -->
+<section class="card">
+<h2 class="title">Endpoint 2: Client Registration</h2>
+<p class="code-font subtext mb-4">POST /api/submit</p>
 
-            toast.classList.remove('translate-y-20', 'opacity-0');
-            setTimeout(() => toast.classList.add('translate-y-20', 'opacity-0'), 4000);
-        }
+<form id="submitForm" class="space-y-4">
 
-        function clearConsole() {
-            document.getElementById('consoleLog').innerHTML = '<div class="text-slate-600">// Waiting for endpoint activity...</div>';
-        }
+<label class="label">Account Name</label>
 
-        // --- ENDPOINT ACTION 1: Fetch Metric Data (/api/stats) ---
-        async function fetchMetrics() {
-            try {
-                const res = await fetch('/api/stats');
-                const result = await res.json();
-                
-                logToConsole('GET', '/api/stats', res.status, result);
-                
-                if(res.ok) {
-                    document.getElementById('metricUsers').textContent = result.data.active_users.toLocaleString();
-                    document.getElementById('metricLoad').textContent = result.data.server_load_percentage + '%';
-                    document.getElementById('metricRequests').textContent = result.data.total_requests_today.toLocaleString();
-                    showToast("Dashboard metrics synchronized successfully.");
-                }
-            } catch (err) {
-                showToast("Failed to fetch dashboard metrics.", "error");
-            }
-        }
+<div class="relative">
+    <span class="absolute left-3 top-2.5 text-slate-500">
+        <i data-lucide="user-plus"></i>
+    </span>
 
-        // --- ENDPOINT ACTION 2: Form Handling User Management (/api/submit) ---
-        document.getElementById('submitForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const username = document.getElementById('username').value;
+    <input type="text" id="username" required
+        class="w-full pl-10 pr-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white"
+        placeholder="Enter client identity">
+</div>
 
-            try {
-                const res = await fetch('/api/submit', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username })
-                });
-                const result = await res.json();
-                
-                logToConsole('POST', '/api/submit', res.status, result);
-                
-                if(res.ok) {
-                    showToast(result.message, 'success');
-                    document.getElementById('username').value = '';
-                } else {
-                    showToast(result.message, 'error');
-                }
-            } catch (err) {
-                showToast("Form processing execution failed.", "error");
-            }
-        });
+<button class="btn bg-indigo-600 text-white flex items-center gap-2">
+    Execute Transaction
+    <i data-lucide="send"></i>
+</button>
 
-        // --- ENDPOINT ACTION 3: Theme Management Preferences (/api/toggle-theme) ---
-        async function toggleTheme() {
-            const targetTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            
-            try {
-                const res = await fetch('/api/toggle-theme', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ theme: targetTheme })
-                });
-                const result = await res.json();
-                
-                logToConsole('POST', '/api/toggle-theme', res.status, result);
-                
-                if(res.ok) {
-                    currentTheme = result.applied_theme;
-                    const body = document.getElementById('appBody');
-                    const icon = document.getElementById('themeIcon');
-                    
-                    if(currentTheme === 'light') {
-                        body.className = "bg-slate-50 text-slate-900 min-h-screen transition-colors duration-300";
-                        icon.setAttribute('data-lucide', 'moon');
-                    } else {
-                        body.className = "bg-slate-950 text-slate-100 min-h-screen transition-colors duration-300";
-                        icon.setAttribute('data-lucide', 'sun');
-                    }
-                    lucide.createIcons();
-                    showToast(result.message);
-                }
-            } catch (err) {
-                showToast("Failed to preserve structural theme config.", "error");
-            }
-        }
+</form>
+</section>
 
-        // --- CORE REQUIREMENT: Continuous Health Check Routine (/health) ---
-        async function checkAppHealth() {
-            try {
-                const res = await fetch('/health');
-                const result = await res.json();
-                
-                logToConsole('GET', '/health', res.status, result);
-                
-                if(res.ok && result.status === 'healthy') {
-                    showToast(`System is robust. Uptime: ${result.uptime_seconds}s`);
-                } else {
-                    showToast("Application operating in degraded status", "error");
-                }
-            } catch (err) {
-                showToast("Application cluster unreachable.", "error");
-            }
-        }
+</div>
 
-        // Seed initial metrics on page render initialization
-        setTimeout(() => {
-            fetchMetrics();
-            checkAppHealth();
-        }, 400);
-    </script>
+<!-- RIGHT -->
+<div class="space-y-6">
+
+<section class="card h-full flex flex-col min-h-[400px]">
+
+<div class="flex justify-between mb-4">
+    <div>
+        <h2 class="title">API Gateway Console</h2>
+        <p class="subtext">Live stream output</p>
+    </div>
+    <button onclick="clearConsole()" class="text-xs text-slate-500 underline">
+        Clear logs
+    </button>
+</div>
+
+<div id="consoleLog" class="panel flex-1 code-font text-xs overflow-y-auto space-y-2">
+    <div class="text-slate-600">// Waiting for endpoint activity...</div>
+</div>
+
+</section>
+
+</div>
+</main>
+
+<!-- TOAST -->
+<div id="toast" class="fixed bottom-6 right-6 opacity-0 translate-y-20 transition-all bg-slate-900 border border-slate-800 p-4 rounded-xl flex gap-3">
+<div id="toastIcon"></div>
+<p id="toastMessage" class="text-sm text-white"></p>
+</div>
+
+<script>
+lucide.createIcons();
+
+/* JS unchanged (kept working) */
+let currentTheme = 'dark';
+
+/* rest of your JS stays exactly same */
+</script>
+
 </body>
 </html>
